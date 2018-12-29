@@ -1,16 +1,30 @@
 {
-  "name": "rbx-rodux",
-  "version": "0.0.1",
-  "description": "",
-  "main": "./rodux/lib/init.lua",
-  "typings": "index.d.ts",
-  "scripts": {
-  },
-  "keywords": [
-	"roblox",
-    "typescript",
-    "rodux"
-  ],
-  "author": "",
-  "license": "ISC"
+	"name": "rbx-rodux",
+	"version": "0.0.3",
+	"description": "TypeScript support for Rodux (Experimental)",
+	"main": "./rodux/lib/init.lua",
+	"typings": "index.d.ts",
+	"scripts": {},
+	"contributors": [
+		{
+			"name": "Jonathan Holmes",
+			"url": "https://github.com/Vorlias"
+		}
+	],
+	"keywords": [
+		"roblox",
+		"typescript",
+		"rodux"
+	],
+	"files": [
+		"rodux/lib/*",
+		"*.d.ts"
+	],
+	"author": "",
+	"licenses": [
+		{
+			"type": "Apache 2.0",
+			"url": "https://github.com/Roblox/rodux/blob/master/LICENSE"
+		}
+	]
 }
