@@ -7,16 +7,6 @@ declare namespace Rodux {
 		getState(): S;
 	}
 
-	// interface Middleware<
-	// 	DispatchExt = {},
-	// 	S = any,
-	// 	D extends Dispatch = Dispatch
-	// > {
-	// 	(api: MiddlewareAPI<D, S>): (
-	// 		next: Dispatch<AnyAction>,
-	// 	) => (action: any) => any;
-	// }
-
 	interface Action<T = any> {
 		type: T;
 	}
@@ -95,19 +85,17 @@ declare namespace Rodux {
 	// Thunk Middleware
 
 	interface ThunkMiddleware extends Middleware {
-		dispatch: ThunkDispatch<AnyAction, {}, Action<any>>;
+		dispatch: ThunkDispatch<AnyAction, Action<any>>;
 	}
 
 	const thunkMiddleware: ThunkMiddleware;
 }
 
-export type ThunkAction<R, S, E, A extends Rodux.Action> = (
-	dispatch: ThunkDispatch<S, E, A>,
-	getState: () => S,
-	extraArgument: E,
+type ThunkAction<R, S, A extends Rodux.Action> = (
+	dispatch: { dispatch: ThunkDispatch<S, A> },
 ) => R;
 
-export interface ThunkDispatch<S, E, A extends Rodux.Action> {
+interface ThunkDispatch<S, A extends Rodux.Action> {
 	<T extends A>(action: T): T;
-	<R>(thunkAction: ThunkAction<R, S, E, A>): R;
+	<R>(thunkAction: ThunkAction<R, S, A>): R;
 }
