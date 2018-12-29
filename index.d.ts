@@ -76,7 +76,7 @@ declare namespace Rodux {
 
 	function createReducer<S, K extends keyof S, A extends Action = AnyAction>(
 		value: S[K],
-		reducerHandlers: { [key in K]: (state: S, action: A) => S[K] },
+		actionHandlers: { [name: string]: (state: S, action: A) => S[K] | S },
 	): Reducer<S[K], A>;
 
 	// Logger Middleware
