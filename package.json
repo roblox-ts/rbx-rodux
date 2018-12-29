@@ -1,12 +1,16 @@
 {
   "name": "rbx-rodux",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "./rodux/lib/init.lua",
+  "typings": "index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+	"roblox",
+    "typescript",
+    "rodux"
+  ],
   "author": "",
   "license": "ISC"
 }
