@@ -2,6 +2,21 @@ export = Rodux;
 export as namespace Rodux;
 
 declare namespace Rodux {
+	export interface MiddlewareAPI<D extends Dispatch = Dispatch, S = any> {
+		dispatch: D;
+		getState(): S;
+	}
+
+	// interface Middleware<
+	// 	DispatchExt = {},
+	// 	S = any,
+	// 	D extends Dispatch = Dispatch
+	// > {
+	// 	(api: MiddlewareAPI<D, S>): (
+	// 		next: Dispatch<AnyAction>,
+	// 	) => (action: any) => any;
+	// }
+
 	interface Action<T = any> {
 		type: T;
 	}
@@ -23,11 +38,43 @@ declare namespace Rodux {
 		[K in keyof S]?: Reducer<S[K], A>
 	};
 
-	class Store<S = any, A extends Action = AnyAction> {
-		constructor(reducer: Reducer<S>, initialState?: S, middleware?: any);
-		public getState(): S;
-		public dispatch<T extends A>(action: T): T;
+	interface StoreChangedSignal<S> {
+		connect(
+			handler: (oldState: Readonly<S>, newState: Readonly<S>) => void,
+		): void;
 	}
+
+	type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> };
+
+	interface Store<S = any, A extends Action = AnyAction> {
+		dispatch: Dispatch<A>;
+		getState(): S;
+		changed: StoreChangedSignal<S>;
+		destruct(): void;
+		flush(): void;
+	}
+
+	interface Middleware {
+		dispatch: Dispatch<AnyAction>;
+	}
+
+	interface StoreCreator {
+		new <S, A extends Action = AnyAction>(
+			reducer: Reducer<S, A>,
+			preloadedState?: DeepPartial<S>,
+		): Store<S, A>;
+		new <
+			S,
+			A extends Action = AnyAction,
+			B extends Middleware = Middleware
+		>(
+			reducer: Reducer<S, A>,
+			preloadedState?: DeepPartial<S>,
+			middleware?: B[],
+		): Store<S, A> & B;
+	}
+
+	const Store: StoreCreator;
 
 	function combineReducers<S>(
 		reducers: ReducersMapObject<S, any>,
@@ -41,4 +88,26 @@ declare namespace Rodux {
 		value: S[K],
 		reducerHandlers: { [key in K]: (state: S, action: A) => S[K] },
 	): Reducer<S[K], A>;
+
+	// Logger Middleware
+	const loggerMiddleware: Middleware;
+
+	// Thunk Middleware
+
+	interface ThunkMiddleware extends Middleware {
+		dispatch: ThunkDispatch<AnyAction, {}, Action<any>>;
+	}
+
+	const thunkMiddleware: ThunkMiddleware;
+}
+
+export type ThunkAction<R, S, E, A extends Rodux.Action> = (
+	dispatch: ThunkDispatch<S, E, A>,
+	getState: () => S,
+	extraArgument: E,
+) => R;
+
+export interface ThunkDispatch<S, E, A extends Rodux.Action> {
+	<T extends A>(action: T): T;
+	<R>(thunkAction: ThunkAction<R, S, E, A>): R;
 }
