@@ -92,7 +92,7 @@ declare namespace Rodux {
 }
 
 type ThunkAction<R, S, A extends Rodux.Action> = (
-	dispatch: { dispatch: ThunkDispatch<S, A> },
+	dispatch: { dispatch: ThunkDispatch<S, A> } & Rodux.Store<any>,
 ) => R;
 
 interface ThunkDispatch<S, A extends Rodux.Action> {
