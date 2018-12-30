@@ -37,7 +37,7 @@ declare namespace Rodux {
 	type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> };
 
 	interface Store<S = any, A extends Action = AnyAction> {
-		dispatch: Dispatch<A>;
+		// dispatch<T extends A>(action: T): T;
 		getState(): S;
 		changed: StoreChangedSignal<S>;
 		destruct(): void;
@@ -45,7 +45,7 @@ declare namespace Rodux {
 	}
 
 	interface Middleware {
-		dispatch: Dispatch<AnyAction>;
+		dispatch<A extends Action = AnyAction>(action: A): A;
 	}
 
 	interface StoreCreator {
@@ -85,7 +85,10 @@ declare namespace Rodux {
 	// Thunk Middleware
 
 	interface ThunkMiddleware extends Middleware {
-		dispatch: ThunkDispatch<AnyAction, Action<any>>;
+		dispatch<A extends Action = AnyAction>(action: A): A;
+		dispatch<R, S, A extends Action = AnyAction>(
+			thunkAction: ThunkAction<R, S, A>,
+		): R;
 	}
 
 	const thunkMiddleware: ThunkMiddleware;
