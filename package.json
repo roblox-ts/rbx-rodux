@@ -1,6 +1,6 @@
 {
 	"name": "rbx-rodux",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"description": "TypeScript support for Rodux (Experimental)",
 	"main": "./rodux/lib/init.lua",
 	"typings": "index.d.ts",
