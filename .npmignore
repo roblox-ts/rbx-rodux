@@ -1,1 +1,4 @@
-.git*
+*
+!index.d.ts
+!rodux/lib/*.lua
+*.spec.lua
