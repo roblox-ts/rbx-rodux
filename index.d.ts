@@ -25,7 +25,7 @@ declare namespace Rodux {
 
 	interface StoreChangedSignal<S> {
 		connect(
-			handler: (oldState: Readonly<S>, newState: Readonly<S>) => void,
+			handler: (newState: Readonly<S>, oldState: Readonly<S>) => void,
 		): void;
 	}
 
