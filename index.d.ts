@@ -2,20 +2,15 @@ export = Rodux;
 export as namespace Rodux;
 
 declare namespace Rodux {
-	export interface MiddlewareAPI<D extends Dispatch = Dispatch, S = any> {
-		dispatch: D;
-		getState(): S;
-	}
-
-	interface Action<T = any> {
+	interface Action<T = string> {
 		type: T;
 	}
 
 	interface AnyAction extends Action {
-		[extraProps: string]: any;
+		[extraProps: string]: unknown;
 	}
 
-	type Reducer<S = any, A extends Action = AnyAction> = (
+	type Reducer<S, A extends Action = AnyAction> = (
 		state: S | undefined,
 		action: A,
 	) => S;
@@ -24,7 +19,7 @@ declare namespace Rodux {
 		<T extends A>(action: T): T;
 	}
 
-	type ReducersMapObject<S = any, A extends Action = Action> = {
+	type ReducersMapObject<S, A extends Action = Action> = {
 		[K in keyof S]?: Reducer<S[K], A>
 	};
 
@@ -36,7 +31,7 @@ declare namespace Rodux {
 
 	type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> };
 
-	interface Store<S = any, A extends Action = AnyAction> {
+	interface Store<S, A extends Action = AnyAction> {
 		dispatch<T extends A>(action: T): T;
 		getState(): S;
 		changed: StoreChangedSignal<S>;
@@ -66,15 +61,20 @@ declare namespace Rodux {
 
 	const Store: StoreCreator;
 
-	function combineReducers<S>(
-		reducers: ReducersMapObject<S, any>,
-	): Reducer<S>;
+	function combineReducers<S>(reducers: ReducersMapObject<S>): Reducer<S>;
 
 	function combineReducers<S, A extends Action = AnyAction>(
 		reducers: ReducersMapObject<S, A>,
 	): Reducer<S, A>;
 
-	function createReducer<S, K extends keyof S, A extends Action = AnyAction>(
+	function createReducer<S, K extends keyof S>(
+		value: S[K],
+		actionHandlers: {
+			[name: string]: (state: S, action: AnyAction) => S[K] | S;
+		},
+	): Reducer<S[K], AnyAction>;
+
+	function createReducer<S, K extends keyof S, A extends Action>(
 		value: S[K],
 		actionHandlers: { [name: string]: (state: S, action: A) => S[K] | S },
 	): Reducer<S[K], A>;
@@ -95,7 +95,7 @@ declare namespace Rodux {
 }
 
 type ThunkAction<R, S, A extends Rodux.Action> = (
-	dispatch: { dispatch: ThunkDispatch<S, A> } & Rodux.Store<any>,
+	dispatch: { dispatch: ThunkDispatch<S, A> } & Rodux.Store<S>,
 ) => R;
 
 interface ThunkDispatch<S, A extends Rodux.Action> {
