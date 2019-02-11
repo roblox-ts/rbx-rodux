@@ -19,7 +19,7 @@ declare namespace Rodux {
 		<T extends A>(action: T): T;
 	}
 
-	type ReducersMapObject<S, A extends Action = Action> = {
+	type ReducersMapObject<S, A extends Action = any> = {
 		[K in keyof S]?: Reducer<S[K], A>
 	};
 
