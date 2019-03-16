@@ -170,7 +170,7 @@ declare namespace Rodux {
 		actionHandlers: { [name: string]: (state: S, action: A) => S[K] | S },
 	): Reducer<S[K], A>;
 
-	interface LoggerMiddleware extends Middleware<LoggerMiddleware, never> {}
+	interface LoggerMiddleware extends Middleware<LoggerMiddleware> {}
 
 	// Logger Middleware
 	const loggerMiddleware: LoggerMiddleware;
@@ -178,11 +178,11 @@ declare namespace Rodux {
 	// Thunk Middleware
 	type StoreThunk<S> = (store: S) => void;
 
-	interface ThunkMiddleware<S> extends Middleware<ThunkMiddleware<S>, S> {
-		dispatch(thunk: StoreThunk<S>): void;
+	interface ThunkMiddleware extends Middleware<ThunkMiddleware> {
+		dispatch<S extends Rodux.Store<any>>(thunk: StoreThunk<S>): void;
 	}
 
-	interface Middleware<M, S> {}
+	interface Middleware<M> {}
 
 	type MiddlewareFactory<
 		S,
@@ -191,19 +191,19 @@ declare namespace Rodux {
 		C = undefined,
 		D = undefined,
 		E = undefined
-	> = E extends Middleware<E, S>
+	> = E extends Middleware<E>
 		? A & B & C & D & E
-		: D extends Middleware<D, S>
+		: D extends Middleware<D>
 		? A & B & C & D
-		: C extends Middleware<C, S>
+		: C extends Middleware<C>
 		? A & B & C
-		: B extends Middleware<B, S>
+		: B extends Middleware<B>
 		? A & B
-		: A extends Middleware<A, S>
+		: A extends Middleware<A>
 		? A
 		: {};
 
-	const thunkMiddleware: ThunkMiddleware<never>;
+	const thunkMiddleware: ThunkMiddleware;
 }
 
 type ThunkAction<R, S, A extends Rodux.Action> = (
