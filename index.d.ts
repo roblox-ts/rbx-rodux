@@ -55,7 +55,7 @@ declare namespace Rodux {
 		 * @param middleware The middleware list
 		 * @template M The Middleware
 		 */
-		new <S, A extends Action, M extends Middleware<M, S>>(
+		new <S, A extends Action, M extends Middleware<M>>(
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
 			middleware?: [M],
@@ -72,8 +72,8 @@ declare namespace Rodux {
 		new <
 			S,
 			A extends Action,
-			M0 extends Middleware<M0, S>,
-			M1 extends Middleware<M1, S>
+			M0 extends Middleware<M0>,
+			M1 extends Middleware<M1>
 		>(
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
@@ -92,9 +92,9 @@ declare namespace Rodux {
 		new <
 			S,
 			A extends Action,
-			M0 extends Middleware<M0, S>,
-			M1 extends Middleware<M1, S>,
-			M2 extends Middleware<M2, S>
+			M0 extends Middleware<M0>,
+			M1 extends Middleware<M1>,
+			M2 extends Middleware<M2>
 		>(
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
@@ -114,10 +114,10 @@ declare namespace Rodux {
 		new <
 			S,
 			A extends Action,
-			M0 extends Middleware<M0, S>,
-			M1 extends Middleware<M1, S>,
-			M2 extends Middleware<M2, S>,
-			M3 extends Middleware<M3, S>
+			M0 extends Middleware<M0>,
+			M1 extends Middleware<M1>,
+			M2 extends Middleware<M2>,
+			M3 extends Middleware<M3>
 		>(
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
@@ -138,11 +138,11 @@ declare namespace Rodux {
 		new <
 			S,
 			A extends Action,
-			M0 extends Middleware<M0, S>,
-			M1 extends Middleware<M1, S>,
-			M2 extends Middleware<M2, S>,
-			M3 extends Middleware<M3, S>,
-			M4 extends Middleware<M4, S>
+			M0 extends Middleware<M0>,
+			M1 extends Middleware<M1>,
+			M2 extends Middleware<M2>,
+			M3 extends Middleware<M3>,
+			M4 extends Middleware<M4>
 		>(
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
