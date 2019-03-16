@@ -29,8 +29,12 @@ declare namespace Rodux {
 
 	type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> };
 
-	interface Store<S, A extends Action = AnyAction> {
+	type DispatchFunction<A> = <T extends A>(action: T) => T;
+	interface Dispatcher<A extends Action = AnyAction> {
 		dispatch<T extends A>(action: T): T;
+	}
+
+	interface Store<S, A extends Action = AnyAction> extends Dispatcher<A> {
 		getState(): S;
 		changed: StoreChangedSignal<S>;
 		destruct(): void;
@@ -39,11 +43,6 @@ declare namespace Rodux {
 
 	type EnhancedStore<S, A extends Action = AnyAction, E = {}> = Store<S, A> &
 		E;
-
-	interface Middleware<M> {
-		/** @internal do not use */
-		__MIDDLEWARE__: never;
-	}
 
 	interface StoreCreator {
 		new <S, A extends Action = AnyAction>(
@@ -56,11 +55,11 @@ declare namespace Rodux {
 		 * @param middleware The middleware list
 		 * @template M The Middleware
 		 */
-		new <S, A extends Action, M extends Middleware<M>>(
+		new <S, A extends Action, M extends Middleware<M, S>>(
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
 			middleware?: [M],
-		): EnhancedStore<S, A, MiddlewareFactory<M>>;
+		): EnhancedStore<S, A, MiddlewareFactory<S, M>>;
 
 		/**
 		 * Create a store with two middlewares
@@ -73,13 +72,13 @@ declare namespace Rodux {
 		new <
 			S,
 			A extends Action,
-			M0 extends Middleware<M0>,
-			M1 extends Middleware<M1>
+			M0 extends Middleware<M0, S>,
+			M1 extends Middleware<M1, S>
 		>(
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
 			middleware?: [M0, M1],
-		): EnhancedStore<S, A, MiddlewareFactory<M0, M1>>;
+		): EnhancedStore<S, A, MiddlewareFactory<S, M0, M1>>;
 
 		/**
 		 * Create a store with three middlewares
@@ -93,14 +92,14 @@ declare namespace Rodux {
 		new <
 			S,
 			A extends Action,
-			M0 extends Middleware<M0>,
-			M1 extends Middleware<M1>,
-			M2 extends Middleware<M2>
+			M0 extends Middleware<M0, S>,
+			M1 extends Middleware<M1, S>,
+			M2 extends Middleware<M2, S>
 		>(
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
 			middleware?: [M0, M1, M2],
-		): EnhancedStore<S, A, MiddlewareFactory<M0, M1, M2>>;
+		): EnhancedStore<S, A, MiddlewareFactory<S, M0, M1, M2>>;
 
 		/**
 		 * Create a store with three middlewares
@@ -115,15 +114,15 @@ declare namespace Rodux {
 		new <
 			S,
 			A extends Action,
-			M0 extends Middleware<M0>,
-			M1 extends Middleware<M1>,
-			M2 extends Middleware<M2>,
-			M3 extends Middleware<M3>
+			M0 extends Middleware<M0, S>,
+			M1 extends Middleware<M1, S>,
+			M2 extends Middleware<M2, S>,
+			M3 extends Middleware<M3, S>
 		>(
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
 			middleware?: [M0, M1, M2, M3],
-		): EnhancedStore<S, A, MiddlewareFactory<M0, M1, M2, M3>>;
+		): EnhancedStore<S, A, MiddlewareFactory<S, M0, M1, M2, M3>>;
 
 		/**
 		 * Create a store with three middlewares
@@ -139,16 +138,16 @@ declare namespace Rodux {
 		new <
 			S,
 			A extends Action,
-			M0 extends Middleware<M0>,
-			M1 extends Middleware<M1>,
-			M2 extends Middleware<M2>,
-			M3 extends Middleware<M3>,
-			M4 extends Middleware<M4>
+			M0 extends Middleware<M0, S>,
+			M1 extends Middleware<M1, S>,
+			M2 extends Middleware<M2, S>,
+			M3 extends Middleware<M3, S>,
+			M4 extends Middleware<M4, S>
 		>(
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
 			middleware?: [M0, M1, M2, M3, M4],
-		): EnhancedStore<S, A, MiddlewareFactory<M0, M1, M2, M3, M4>>;
+		): EnhancedStore<S, A, MiddlewareFactory<S, M0, M1, M2, M3, M4>>;
 	}
 
 	const Store: StoreCreator;
@@ -171,45 +170,46 @@ declare namespace Rodux {
 		actionHandlers: { [name: string]: (state: S, action: A) => S[K] | S },
 	): Reducer<S[K], A>;
 
-	interface LoggerMiddleware extends Middleware<LoggerMiddleware> {}
+	interface LoggerMiddleware extends Middleware<LoggerMiddleware, never> {}
 
 	// Logger Middleware
 	const loggerMiddleware: LoggerMiddleware;
 
 	// Thunk Middleware
+	type StoreThunk<S> = (store: S) => void;
 
-	interface ThunkMiddleware extends Middleware<ThunkMiddleware> {
-		dispatch<R, S, A extends Action = AnyAction>(
-			thunkAction: ThunkAction<R, S, A>,
-		): R;
+	interface ThunkMiddleware<S> extends Middleware<ThunkMiddleware<S>, S> {
+		dispatch(thunk: StoreThunk<S>): void;
 	}
 
+	interface Middleware<M, S> {}
+
 	type MiddlewareFactory<
+		S,
 		A,
 		B = undefined,
 		C = undefined,
 		D = undefined,
 		E = undefined
-	> = E extends Middleware<E>
+	> = E extends Middleware<E, S>
 		? A & B & C & D & E
-		: D extends Middleware<D>
+		: D extends Middleware<D, S>
 		? A & B & C & D
-		: C extends Middleware<C>
+		: C extends Middleware<C, S>
 		? A & B & C
-		: B extends Middleware<B>
+		: B extends Middleware<B, S>
 		? A & B
-		: A extends Middleware<A>
+		: A extends Middleware<A, S>
 		? A
 		: {};
 
-	const thunkMiddleware: ThunkMiddleware;
+	const thunkMiddleware: ThunkMiddleware<never>;
 }
 
 type ThunkAction<R, S, A extends Rodux.Action> = (
-	dispatch: { dispatch: ThunkDispatch<S, A> } & Rodux.Store<S>,
+	dispatch: Rodux.Store<S>,
 ) => R;
 
-interface ThunkDispatch<S, A extends Rodux.Action> {
-	<T extends A>(action: T): T;
+interface ThunkDispatch<S, A extends Rodux.Action> extends Rodux.Dispatcher<A> {
 	<R>(thunkAction: ThunkAction<R, S, A>): R;
 }
