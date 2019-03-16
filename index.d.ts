@@ -19,9 +19,7 @@ declare namespace Rodux {
 		<T extends A>(action: T): T;
 	}
 
-	type ReducersMapObject<S, A extends Action = any> = {
-		[K in keyof S]?: Reducer<S[K], A>
-	};
+	type ReducersMapObject<S> = { [K in keyof S]?: Reducer<S[K], any> };
 
 	interface StoreChangedSignal<S> {
 		connect(
@@ -158,7 +156,7 @@ declare namespace Rodux {
 	function combineReducers<S>(reducers: ReducersMapObject<S>): Reducer<S>;
 
 	function combineReducers<S, A extends Action>(
-		reducers: ReducersMapObject<S, A>,
+		reducers: ReducersMapObject<S>,
 	): Reducer<S, A>;
 
 	function createReducer<S, K extends keyof S>(
