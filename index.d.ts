@@ -179,7 +179,6 @@ declare namespace Rodux {
 	// Thunk Middleware
 
 	interface ThunkMiddleware extends Middleware<ThunkMiddleware> {
-		dispatch<A extends Action = AnyAction>(action: A): A;
 		dispatch<R, S, A extends Action = AnyAction>(
 			thunkAction: ThunkAction<R, S, A>,
 		): R;
