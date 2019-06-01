@@ -10,10 +10,7 @@ declare namespace Rodux {
 		[extraProps: string]: unknown;
 	}
 
-	type Reducer<S, A extends Action = AnyAction> = (
-		state: S | undefined,
-		action: A,
-	) => S;
+	type Reducer<S, A extends Action = AnyAction> = (state: S | undefined, action: A) => S;
 
 	interface Dispatch<A extends Action = AnyAction> {
 		<T extends A>(action: T): T;
@@ -22,9 +19,7 @@ declare namespace Rodux {
 	type ReducersMapObject<S> = { [K in keyof S]?: Reducer<S[K], any> };
 
 	interface StoreChangedSignal<S> {
-		connect(
-			handler: (newState: Readonly<S>, oldState: Readonly<S>) => void,
-		): void;
+		connect(handler: (newState: Readonly<S>, oldState: Readonly<S>) => void): void;
 	}
 
 	type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> };
@@ -41,14 +36,10 @@ declare namespace Rodux {
 		flush(): void;
 	}
 
-	type EnhancedStore<S, A extends Action = AnyAction, E = {}> = Store<S, A> &
-		E;
+	type EnhancedStore<S, A extends Action = AnyAction, E = {}> = Store<S, A> & E;
 
 	interface StoreCreator {
-		new <S, A extends Action = AnyAction>(
-			reducer: Reducer<S, A>,
-			preloadedState?: DeepPartial<S>,
-		): Store<S, A>;
+		new <S, A extends Action = AnyAction>(reducer: Reducer<S, A>, preloadedState?: DeepPartial<S>): Store<S, A>;
 
 		/**
 		 * Create a store with one Middleware
@@ -58,7 +49,7 @@ declare namespace Rodux {
 		new <S, A extends Action, M extends Middleware<M>>(
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
-			middleware?: [M],
+			middleware?: [M]
 		): EnhancedStore<S, A, MiddlewareFactory<S, M>>;
 
 		/**
@@ -69,15 +60,10 @@ declare namespace Rodux {
 		 * @template M0 The first Middleware
 		 * @template M1 The second middleware
 		 */
-		new <
-			S,
-			A extends Action,
-			M0 extends Middleware<M0>,
-			M1 extends Middleware<M1>
-		>(
+		new <S, A extends Action, M0 extends Middleware<M0>, M1 extends Middleware<M1>>(
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
-			middleware?: [M0, M1],
+			middleware?: [M0, M1]
 		): EnhancedStore<S, A, MiddlewareFactory<S, M0, M1>>;
 
 		/**
@@ -89,16 +75,10 @@ declare namespace Rodux {
 		 * @template M1 The second middleware
 		 * @template M2 The third middleware
 		 */
-		new <
-			S,
-			A extends Action,
-			M0 extends Middleware<M0>,
-			M1 extends Middleware<M1>,
-			M2 extends Middleware<M2>
-		>(
+		new <S, A extends Action, M0 extends Middleware<M0>, M1 extends Middleware<M1>, M2 extends Middleware<M2>>(
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
-			middleware?: [M0, M1, M2],
+			middleware?: [M0, M1, M2]
 		): EnhancedStore<S, A, MiddlewareFactory<S, M0, M1, M2>>;
 
 		/**
@@ -121,7 +101,7 @@ declare namespace Rodux {
 		>(
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
-			middleware?: [M0, M1, M2, M3],
+			middleware?: [M0, M1, M2, M3]
 		): EnhancedStore<S, A, MiddlewareFactory<S, M0, M1, M2, M3>>;
 
 		/**
@@ -146,7 +126,7 @@ declare namespace Rodux {
 		>(
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
-			middleware?: [M0, M1, M2, M3, M4],
+			middleware?: [M0, M1, M2, M3, M4]
 		): EnhancedStore<S, A, MiddlewareFactory<S, M0, M1, M2, M3, M4>>;
 	}
 
@@ -154,20 +134,18 @@ declare namespace Rodux {
 
 	function combineReducers<S>(reducers: ReducersMapObject<S>): Reducer<S>;
 
-	function combineReducers<S, A extends Action>(
-		reducers: ReducersMapObject<S>,
-	): Reducer<S, A>;
+	function combineReducers<S, A extends Action>(reducers: ReducersMapObject<S>): Reducer<S, A>;
 
 	function createReducer<S, K extends keyof S>(
 		value: S[K],
 		actionHandlers: {
 			[name: string]: (state: S, action: AnyAction) => S[K] | S;
-		},
+		}
 	): Reducer<S[K], AnyAction>;
 
 	function createReducer<S, K extends keyof S, A extends Action>(
 		value: S[K],
-		actionHandlers: { [name: string]: (state: S, action: A) => S[K] | S },
+		actionHandlers: { [name: string]: (state: S, action: A) => S[K] | S }
 	): Reducer<S[K], A>;
 
 	interface LoggerMiddleware extends Middleware<LoggerMiddleware> {}
@@ -184,14 +162,7 @@ declare namespace Rodux {
 
 	interface Middleware<M> {}
 
-	type MiddlewareFactory<
-		S,
-		A,
-		B = undefined,
-		C = undefined,
-		D = undefined,
-		E = undefined
-	> = E extends Middleware<E>
+	type MiddlewareFactory<S, A, B = undefined, C = undefined, D = undefined, E = undefined> = E extends Middleware<E>
 		? A & B & C & D & E
 		: D extends Middleware<D>
 		? A & B & C & D
@@ -206,9 +177,7 @@ declare namespace Rodux {
 	const thunkMiddleware: ThunkMiddleware;
 }
 
-type ThunkAction<R, S, A extends Rodux.Action> = (
-	dispatch: Rodux.Store<S>,
-) => R;
+type ThunkAction<R, S, A extends Rodux.Action> = (dispatch: Rodux.Store<S>) => R;
 
 interface ThunkDispatch<S, A extends Rodux.Action> extends Rodux.Dispatcher<A> {
 	<R>(thunkAction: ThunkAction<R, S, A>): R;
