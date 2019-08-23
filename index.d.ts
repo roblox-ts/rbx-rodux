@@ -133,7 +133,7 @@ declare namespace Rodux {
 	// * THUNKS *
 
 	interface ThunkAction<R, S, E, A extends Action> {
-		(dispatch: S): void;
+		(dispatch: Rodux.Store<S, A>): R;
 	}
 
 	interface ThunkExt {
@@ -151,7 +151,15 @@ declare namespace Rodux {
 		S = {},
 		A extends Action = AnyAction,
 		E = undefined
-	> = Middleware<ThunkDispatch<S, E, A>, S, ThunkDispatch<S, E, A>>;
+	> = Middleware<
+		ThunkDispatch<Store<S>, E, A>,
+		S,
+		ThunkDispatch<Store<S>, E, A>
+	>;
 
 	const thunkMiddleware: ThunkMiddleware;
+
+	function applyMiddleware<Ext1, S>(
+		middleware: Middleware<Ext1, S, any>,
+	): void;
 }
