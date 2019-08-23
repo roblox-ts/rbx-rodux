@@ -53,7 +53,6 @@ declare namespace Rodux {
 		/**
 		 * Create a store with one Middleware
 		 * @param middleware The middleware list
-		 * @template M The Middleware
 		 */
 		new <S, A extends Action, Ext1>(
 			reducer: Reducer<S, A>,
