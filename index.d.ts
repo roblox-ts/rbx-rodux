@@ -55,7 +55,7 @@ declare namespace Rodux {
 		 * @param middleware The middleware list
 		 * @template M The Middleware
 		 */
-		new <Ext1, S, A extends Action>(
+		new <S, A extends Action, Ext1>(
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
 			middleware?: [Middleware<Ext1, S, any>],
@@ -64,7 +64,7 @@ declare namespace Rodux {
 		/**
 		 * Create a store with two Middlewares
 		 */
-		new <Ext1, Ext2, S, A extends Action>(
+		new <S, A extends Action, Ext1, Ext2>(
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
 			middleware?: [Middleware<Ext1, S, any>, Middleware<Ext2, S, any>],
@@ -73,7 +73,7 @@ declare namespace Rodux {
 		/**
 		 * Create a store with three Middlewares
 		 */
-		new <Ext1, Ext2, Ext3, S, A extends Action>(
+		new <S, A extends Action, Ext1, Ext2, Ext3>(
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
 			middleware?: [
@@ -86,7 +86,7 @@ declare namespace Rodux {
 		/**
 		 * Create a store with three Middlewares
 		 */
-		new <Ext1, Ext2, Ext3, Ext4, S, A extends Action>(
+		new <S, A extends Action, Ext1, Ext2, Ext3, Ext4>(
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
 			middleware?: [
@@ -158,8 +158,4 @@ declare namespace Rodux {
 	>;
 
 	const thunkMiddleware: ThunkMiddleware;
-
-	function applyMiddleware<Ext1, S>(
-		middleware: Middleware<Ext1, S, any>,
-	): void;
 }
