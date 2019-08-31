@@ -55,7 +55,7 @@ Explicitly defining the type for Rodux.thunkMiddleware will allow you to get the
 If you also use `Rodux.loggerMiddleware` (or any other middleware) :
 
 ```ts
-const store = new Rodux.Store<IStore, StoreActions, Rodux.ThunkDispatch<IStore, {}, StoreActions>, Rodux.Middleware>(
+const store = new Rodux.Store<IStore, StoreActions, Rodux.ThunkDispatch<IStore, {}, StoreActions>, {}>(
 	reducers,
 	{},
 	[Rodux.thunkMiddleware, Rodux.loggerMiddleware],
