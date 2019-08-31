@@ -29,9 +29,12 @@ declare namespace Rodux {
 
 	type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> };
 
-	type DispatchFunction<A> = <T extends A>(action: T) => T;
 	interface Dispatcher<A extends Action = AnyAction> {
-		dispatch<T extends A>(action: T): T;
+		dispatch<T extends A>(this: {}, action: T): T;
+	}
+
+	interface ThunkDispatcher<S, A extends Action = AnyAction> {
+		dispatch<R>(this: {}, action: (store: S) => any): R;
 	}
 
 	interface Store<S, A extends Action = AnyAction> extends Dispatcher<A> {
@@ -41,8 +44,7 @@ declare namespace Rodux {
 		flush(): void;
 	}
 
-	type EnhancedStore<S, A extends Action = AnyAction, E = {}> = Store<S, A> &
-		E;
+	type EnhancedStore<S, A extends Action, E = {}> = Store<S, A> & E;
 
 	interface StoreCreator {
 		new <S, A extends Action = AnyAction>(
@@ -57,8 +59,8 @@ declare namespace Rodux {
 		new <S, A extends Action, Ext1>(
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
-			middleware?: [Middleware<Ext1, S, any>],
-		): EnhancedStore<S, A, { dispatch: Ext1 }>;
+			middleware?: [Middleware<Ext1, S>],
+		): EnhancedStore<S, A, Ext1>;
 
 		/**
 		 * Create a store with two Middlewares
@@ -66,8 +68,8 @@ declare namespace Rodux {
 		new <S, A extends Action, Ext1, Ext2>(
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
-			middleware?: [Middleware<Ext1, S, any>, Middleware<Ext2, S, any>],
-		): EnhancedStore<S, A, { dispatch: Ext1 & Ext2 }>;
+			middleware?: [Middleware<Ext1, S>, Middleware<Ext2, S>],
+		): EnhancedStore<S, A, Ext1 & Ext2>;
 
 		/**
 		 * Create a store with three Middlewares
@@ -76,25 +78,25 @@ declare namespace Rodux {
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
 			middleware?: [
-				Middleware<Ext1, S, any>,
-				Middleware<Ext2, S, any>,
-				Middleware<Ext3, S, any>
+				Middleware<Ext1, S>,
+				Middleware<Ext2, S>,
+				Middleware<Ext3, S>,
 			],
-		): EnhancedStore<S, A, { dispatch: Ext1 & Ext2 & Ext3 }>;
+		): EnhancedStore<S, A, Ext1 & Ext2 & Ext3>;
 
 		/**
-		 * Create a store with three Middlewares
+		 * Create a store with four Middlewares
 		 */
 		new <S, A extends Action, Ext1, Ext2, Ext3, Ext4>(
 			reducer: Reducer<S, A>,
 			preloadedState?: DeepPartial<S>,
 			middleware?: [
-				Middleware<Ext1, S, any>,
-				Middleware<Ext2, S, any>,
-				Middleware<Ext3, S, any>,
-				Middleware<Ext4, S, any>
+				Middleware<Ext1, S>,
+				Middleware<Ext2, S>,
+				Middleware<Ext3, S>,
+				Middleware<Ext4, S>,
 			],
-		): EnhancedStore<S, A, { dispatch: Ext1 & Ext2 & Ext3 & Ext4 }>;
+		): EnhancedStore<S, A, Ext1 & Ext2 & Ext3 & Ext4>;
 	}
 
 	const Store: StoreCreator;
@@ -119,11 +121,7 @@ declare namespace Rodux {
 
 	// * Middleware *
 
-	interface Middleware<
-		DispatchExt = {},
-		S = any,
-		D extends Dispatch = Dispatch
-	> {
+	interface Middleware<DispatchExt = {}, S = any> {
 		(nextDispatch: Dispatch<AnyAction>, store: S): (action: any) => any;
 	}
 
@@ -132,29 +130,35 @@ declare namespace Rodux {
 	// * THUNKS *
 
 	interface ThunkAction<R, S, E, A extends Action> {
-		(dispatch: Rodux.Store<S, A>): R;
-	}
-
-	interface ThunkExt {
-		dispatch<A extends Action, S, E, R extends Action<any>>(
-			asyncAction: (store: S) => void,
-		): R;
-	}
-
-	interface ThunkDispatch<S, E, A extends Action> {
-		<T extends A>(action: T): T;
-		<R>(asyncAction: ThunkAction<R, S, E, A>): R;
+		(this: {}, dispatch: Rodux.Store<S, A>): R;
 	}
 
 	type ThunkMiddleware<
 		S = {},
 		A extends Action = AnyAction,
 		E = undefined
-	> = Middleware<
-		ThunkDispatch<Store<S>, E, A>,
-		S,
-		ThunkDispatch<Store<S>, E, A>
-	>;
+	> = Middleware<ThunkDispatcher<EnhancedStore<S, A>, A>, S>;
 
 	const thunkMiddleware: ThunkMiddleware;
+
+	type DispatchParam<TStore> = TStore extends Rodux.EnhancedStore<
+		infer S,
+		infer A,
+		infer E
+	>
+		? E extends ThunkDispatcher<any, any>
+			? {
+					(action: A): A;
+					<R>(
+						thunkAction: (store: Rodux.EnhancedStore<S, A, E>) => R,
+					): R;
+			  }
+			: {
+					(action: A): A;
+			  }
+		: TStore extends Rodux.Store<any, infer A>
+		? {
+				(action: A): A;
+		  }
+		: never;
 }
