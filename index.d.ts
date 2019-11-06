@@ -34,7 +34,16 @@ declare namespace Rodux {
 	}
 
 	interface ThunkDispatcher<S, A extends Action = AnyAction> {
-		dispatch<R>(this: {}, action: (store: S) => any): R;
+		/**
+		 * Thunk action
+		 * @param action The action
+		 */
+		dispatch<R>(this: {}, action: (store: S) => R): R;
+		/**
+		 * Async thunk action
+		 * @param action The action
+		 */
+		dispatch<R>(this: {}, action: (store: S) => Promise<R>): Promise<R>;
 	}
 
 	interface Store<S, A extends Action = AnyAction> extends Dispatcher<A> {
