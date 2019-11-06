@@ -7,7 +7,7 @@
 	<a href="https://github.com/roblox-ts/roblox-ts">
 		<img src="https://img.shields.io/badge/github-roblox_typescript-red.svg" alt="roblox-ts"></img>
 	</a>
-	<a href="https://www.npmjs.com/package/@rbxts/roact-rodux">
+	<a href="https://www.npmjs.com/package/@rbxts/rodux">
 		<img src="https://badge.fury.io/js/%40rbxts%2Frodux.svg"></img>
 	</a>
 </div>
