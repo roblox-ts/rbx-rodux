@@ -11,7 +11,7 @@ declare namespace Rodux {
 	}
 
 	type Reducer<S, A extends Action = AnyAction> = (
-		state: S | undefined,
+		state: S,
 		action: A,
 	) => S;
 
@@ -19,7 +19,7 @@ declare namespace Rodux {
 		<T extends A>(action: T): T;
 	}
 
-	type ReducersMapObject<S> = { [K in keyof S]?: Reducer<S[K], any> };
+	type ReducersMapObject<S> = { [K in keyof S]: Reducer<S[K], any> };
 
 	interface StoreChangedSignal<S> {
 		connect(
@@ -116,17 +116,74 @@ declare namespace Rodux {
 		reducers: ReducersMapObject<S>,
 	): Reducer<S, A>;
 
+	/**
+	 * Creates a reducer that handles actions under `actionHandlers`.
+	 * Use the second overload for more explicit action handling
+	 * @param value
+	 * @param actionHandlers
+	 */
 	function createReducer<S, K extends keyof S>(
 		value: S[K],
 		actionHandlers: {
-			[name: string]: (state: S, action: AnyAction) => S[K] | S;
+			[name: string]: (state: S[K], action: AnyAction) => S[K] | S;
 		},
 	): Reducer<S[K], AnyAction>;
 
+	type ActionFromName<TActions, T extends string> = TActions extends { type: T } ? TActions : never;
+	type ActionHandlers<V, A extends Action> = { [TType in A["type"]]: (reducerState: V, action: ActionFromName<A, TType>) => V };
+
+	/**
+	 * Creates a reducer that handles each action under `actionHandlers`.
+	 *
+	 * ```ts
+	 * interface ExampleReducer {
+	 * 	Example: Array<string>;
+	 * }
+	 * type TestActions = Action<"test">;
+	 * const exampleReducer = Rodux.createReducer<
+	 * 	ExampleReducer,
+	 * 	"Example",
+	 * 	TestActions
+	 * >(["initialString"], {
+	 * 	test: (state, action) => {
+	 * 		return state;
+	 * 	}
+	 * })
+	 * ```
+	 *
+	 * @param initialValue The initial value
+	 * @param actionHandlers The action handlers
+	 */
 	function createReducer<S, K extends keyof S, A extends Action>(
-		value: S[K],
-		actionHandlers: { [name: string]: (state: S, action: A) => S[K] | S },
+		initialValue: S[K],
+		actionHandlers: ActionHandlers<S[K], A>
 	): Reducer<S[K], A>;
+
+		/**
+	 * Creates a reducer that handles each action under `actionHandlers`.
+	 *
+	 * ```ts
+	 * interface ExampleReducer {
+	 * 	Example: Array<string>;
+	 * }
+	 * type TestActions = Action<"test">;
+	 * const exampleReducer = Rodux.createReducer<
+	 * 	ExampleReducer["Example"],
+	 * 	TestActions
+	 * >(["initialString"], {
+	 * 	test: (state, action) => {
+	 * 		return state;
+	 * 	}
+	 * })
+	 * ```
+	 *
+	 * @param initialValue The initial value
+	 * @param actionHandlers The action handlers
+	 */
+	function createReducer<TValue, TAction extends Action>(
+		initialValue: TValue,
+		actionHandlers: ActionHandlers<TValue, TAction>,
+	): Reducer<TValue, TAction>;
 
 	// * Middleware *
 
