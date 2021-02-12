@@ -131,10 +131,10 @@ declare namespace Rodux {
 	function makeActionCreator<
 		S extends string,
 		K extends (...args: any[]) => Omit<AnyAction, 'type'> & {type?: undefined}
-	>(
-		type: S,
-		actionCreator: K
-	): (...args: Parameters<K>) => ReturnType<K> & {type: S}
+	>(type: S, actionCreator: K): {
+		(...args: Parameters<K>): ReturnType<K> & {type: S};
+		name: S;
+	};
 
 	// * Middleware *
 
