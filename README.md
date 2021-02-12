@@ -23,7 +23,7 @@ You can install it via `npm i @rbxts/rodux`.
 
 
 ## Using Thunk Middleware
-if you decide to use the thunk middleware, you will have to explictly set the template argments when creating Rodux.Store, otherwise it will not type correctly.
+if you decide to use the thunk middleware, you will have to explicitly set the template arguments when creating Rodux.Store, otherwise it will not type correctly.
 
 Example:
 ```ts
