@@ -1,4 +1,4 @@
-import Rodux, { ThunkAction } from "./index";
+import Rodux from "./index";
 
 declare function makeActionCreator<
     TName extends string,
