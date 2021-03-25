@@ -13,6 +13,7 @@ interface StoreCreator {
     new <S, A extends Rodux.Action = Rodux.AnyAction>(
         reducer: Rodux.Reducer<S, A>,
         preloadedState?: DeepPartial<S>,
+        errorReporter?: Rodux.ErrorReporter<S, A>,
     ): Store<S, A>;
 
     /**
@@ -23,6 +24,7 @@ interface StoreCreator {
         reducer: Rodux.Reducer<S, A>,
         preloadedState?: DeepPartial<S>,
         middleware?: [Rodux.Middleware<Ext1, S>],
+        errorReporter?: Rodux.ErrorReporter<S, A>,
     ): Rodux.EnhancedStore<S, A, Ext1>;
 
     /**
@@ -32,6 +34,7 @@ interface StoreCreator {
         reducer: Rodux.Reducer<S, A>,
         preloadedState?: DeepPartial<S>,
         middleware?: [Rodux.Middleware<Ext1, S>, Rodux.Middleware<Ext2, S>],
+        errorReporter?: Rodux.ErrorReporter<S, A>,
     ): Rodux.EnhancedStore<S, A, Ext1 & Ext2>;
 
     /**
@@ -45,6 +48,7 @@ interface StoreCreator {
             Rodux.Middleware<Ext2, S>,
             Rodux.Middleware<Ext3, S>,
         ],
+        errorReporter?: Rodux.ErrorReporter<S, A>
     ): Rodux.EnhancedStore<S, A, Ext1 & Ext2 & Ext3>;
 
     /**
@@ -59,6 +63,7 @@ interface StoreCreator {
             Rodux.Middleware<Ext3, S>,
             Rodux.Middleware<Ext4, S>,
         ],
+        errorReporter?: Rodux.ErrorReporter<S, A>
     ): Rodux.EnhancedStore<S, A, Ext1 & Ext2 & Ext3 & Ext4>;
 }
 

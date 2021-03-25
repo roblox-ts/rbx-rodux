@@ -16,6 +16,27 @@ declare namespace Rodux {
     }
 }
 
+// Error Reporting (v3.0)
+declare namespace Rodux {
+  export interface ErrorResult {
+    message: string;
+    thrownValue: unknown;
+  }
+
+  type ErrorReporterCallback<S, A> = (prevState: Readonly<S>, action: Rodux.Action<A>, errorResult: ErrorResult) => void;
+
+  /**
+   * An error reporter for a Rodux store
+   * 
+   * https://github.com/Roblox/rodux/pull/60
+   * @version 3.0
+   */
+  export interface ErrorReporter<S, A> {
+    reportReducerError: ErrorReporterCallback<S, A>;
+    reportUpdateError: ErrorReporterCallback<S, A>;
+  }
+}
+
 // Store extras
 declare namespace Rodux {
     interface StoreChangedSignal<S> {
