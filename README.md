@@ -12,7 +12,7 @@
 </div>
 
 <div align="center">
-	The typescript version of <a href='https://github.com/Roblox/rodux'>Rodux</a>, the Rodux extension for Roact.
+	The roblox-ts version of <a href='https://github.com/Roblox/rodux'>Rodux</a>, A state management library for Roblox inspired by <a href="https://redux.js.org/">Redux</a>.
 </div>
 
 <div>&nbsp;</div>
