@@ -1,8 +1,6 @@
 import combineReducers from "./combineReducers";
 import createReducer from "./createReducer";
 import Store from "./Store";
-import LoggerMiddleware from "./loggerMiddleware";
-import thunkMiddleware from "./thunkMiddleware";
 import makeActionCreator from "./makeActionCreator";
 
 declare namespace Rodux {
