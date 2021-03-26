@@ -8,7 +8,7 @@ import Rodux from "./index";
  */
 declare function createReducer<S, A extends Rodux.Action>(
 	value: S,
-	actionHandlers: Rodux.ActionHandlers<S, A>,
+	actionHandlers: Rodux.ActionHandlers<S, A>
 ): Rodux.Reducer<S, A>;
 
 export = createReducer;
