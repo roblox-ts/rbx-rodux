@@ -1,6 +1,6 @@
 {
 	"name": "@rbxts/rodux",
-	"version": "3.0.0-ts.0",
+	"version": "3.0.0-ts.2",
 	"description": "Rodux for Roblox TypeScript",
 	"main": "src/init.lua",
 	"typings": "src/index.d.ts",

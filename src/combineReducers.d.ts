@@ -1,6 +1,6 @@
 import Rodux from "./index";
 type ReducerMap<S, A extends Rodux.Action> = {
-	[K in keyof S]: Rodux.Reducer<S[K], A>;
+	[K in keyof S]: Rodux.Reducer<S[K], any>;
 };
 
 /**
