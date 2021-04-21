@@ -1,5 +1,4 @@
-<div align="center"><img src="https://assets.vorlias.com/i1/rodux-ts.png?v=3"/></div>
-<h1 align="center">Rodux-TS</h1>
+<div align="center"><img src="./docs/static/img/rodux.svg"/></div>
 <div align="center">
 	<a href="https://roblox.github.io/roact-rodux">
 		<img src="https://img.shields.io/badge/docs-lua-purple.svg" alt="Documentation"></img>
@@ -13,7 +12,7 @@
 </div>
 
 <div align="center">
-	A typescript port of <a href='https://github.com/Roblox/rodux'>Rodux</a>, the Rodux extension for Roact.
+	The roblox-ts version of <a href='https://github.com/Roblox/rodux'>Rodux</a>, A state management library for Roblox inspired by <a href="https://redux.js.org/">Redux</a>.
 </div>
 
 <div>&nbsp;</div>

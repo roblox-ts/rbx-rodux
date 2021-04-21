@@ -1,9 +1,9 @@
 {
 	"name": "@rbxts/rodux",
-	"version": "1.0.0",
-	"description": "TypeScript support for Rodux (Experimental)",
-	"main": "./rodux/lib/init.lua",
-	"typings": "index.d.ts",
+	"version": "3.0.0-ts.2",
+	"description": "Rodux for Roblox TypeScript",
+	"main": "src/init.lua",
+	"typings": "src/index.d.ts",
 	"scripts": {},
 	"contributors": [
 		{
@@ -22,5 +22,8 @@
 			"type": "Apache 2.0",
 			"url": "https://github.com/Roblox/rodux/blob/master/LICENSE"
 		}
-	]
+	],
+	"devDependencies": {
+		"@rbxts/compiler-types": "^1.0.0-types.0"
+	}
 }
