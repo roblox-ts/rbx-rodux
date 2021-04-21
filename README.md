@@ -1,6 +1,6 @@
 <div align="center"><img src="./docs/static/img/rodux.svg"/></div>
 <div align="center">
-	<a href="https://roblox.github.io/roact-rodux">
+	<a href="https://roblox.github.io/rodux">
 		<img src="https://img.shields.io/badge/docs-lua-purple.svg" alt="Documentation"></img>
 	</a>
 	<a href="https://github.com/roblox-ts/roblox-ts">
