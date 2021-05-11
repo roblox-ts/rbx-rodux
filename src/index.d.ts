@@ -60,10 +60,13 @@ declare namespace Rodux {
 
 // Store extras
 declare namespace Rodux {
+	interface Signal {
+		disconnect(): void;
+	}
 	interface StoreChangedSignal<S> {
 		connect(
 			handler: (newState: Readonly<S>, oldState: Readonly<S>) => void
-		): void;
+		): Signal;
 	}
 
 	type EnhancedStore<S, A extends Rodux.Action, E = {}> = Store<S, A> & E;
