@@ -1,6 +1,6 @@
 import Rodux from "./index";
 
-type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> };
+type DeepPartial<T> = T extends Instance ? T : { [K in keyof T]?: DeepPartial<T[K]> };
 
 interface Store<S, A extends Rodux.Action = Rodux.AnyAction>
 	extends Rodux.Dispatcher<A> {
