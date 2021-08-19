@@ -167,7 +167,7 @@ declare namespace Rodux {
 	}
 
 	interface ThunkAction<R, S, E, A extends Action> {
-		(this: {}, dispatch: Rodux.Store<S, A>): R;
+		(this: void, dispatch: Rodux.Store<S, A>): R;
 	}
 
 	interface ThunkDispatcher<S, A extends Action = AnyAction> {
