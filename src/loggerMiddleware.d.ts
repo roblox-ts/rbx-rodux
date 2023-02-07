@@ -5,6 +5,6 @@ interface LoggerMiddleware {
     outputFunction: (outputString: string) => void;
 }
 
-declare const LoggerMiddleware: LoggerMiddleware
+declare const LoggerMiddleware: LoggerMiddleware;
 
-export = LoggerMiddleware
+export = LoggerMiddleware;
