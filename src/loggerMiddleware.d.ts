@@ -1,4 +1,4 @@
-import Rodux from "@rbxts/rodux";
+import Rodux from "./index";
 
 interface LoggerMiddleware {
     middleware: Rodux.Middleware;
