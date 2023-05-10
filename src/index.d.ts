@@ -175,12 +175,12 @@ declare namespace Rodux {
 		 * Thunk action
 		 * @param action The action
 		 */
-		dispatch<R>(this: {}, action: (store: Store<S,A>) => R): R;
+		dispatch<R>(this: {}, action: (store: Store<S, A>) => R): R;
 		/**
 		 * Async thunk action
 		 * @param action The action
 		 */
-		dispatch<R>(this: {}, action: (store: Store<S,A>) => Promise<R>): Promise<R>;
+		dispatch<R>(this: {}, action: (store: Store<S, A>) => Promise<R>): Promise<R>;
 	}
 
 	type ThunkMiddleware<
